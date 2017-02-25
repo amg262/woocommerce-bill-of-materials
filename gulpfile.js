@@ -5,6 +5,18 @@ var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var sourcemaps = require('gulp-sourcemaps');
 var del = require('del');
+var sass = require('gulp-sass');
+var csslint = require('gulp-csslint');
+var wordpress = require( "wordpress" );
+var WPAPI = require( 'wpapi' );
+var wp = new WPAPI({ endpoint: 'http://src.wordpress-develop.dev/wp-json' });
+const wordpressDebug = require('wordpress-debug').default;
+const del = require('del');
+
+wordpressDebug('path/to/wp-config.php'); // Enable debug
+wordpressDebug('path/to/wp-config.php', true); // Enable debug
+wordpressDebug('path/to/wp-config.php', false); // Disable debug
+
 
 var paths = {
     //scripts: ['client/js/**/*.coffee', '!client/external/**/*.coffee'],
@@ -42,6 +54,51 @@ gulp.task('images', ['clean'], function() {
 gulp.task('watch', function() {
     //gulp.watch(paths.scripts, ['scripts']);
     gulp.watch(paths.images, ['images']);
+});
+
+gulp.task('sass', function () {
+    return gulp.src('./sass/**/*.scss')
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest('./css'));
+});
+
+gulp.task('sass:watch', function () {
+    gulp.watch('./sass/**/*.scss', ['sass']);
+});
+
+gulp.task('css', function() {
+    gulp.src('client/css/*.css')
+        .pipe(csslint())
+        .pipe(csslint.formatter());
+});
+
+var client = wordpress.createClient({
+    url: "www.devnet.dev",
+    username: "admin",
+    password: "secret"
+});
+
+client.getPosts(function( error, posts ) {
+    console.log( "Found " + posts.length + " posts!" );
+});
+
+// Callbacks
+wp.posts().get(function( err, data ) {
+    if ( err ) {
+        // handle err
+    }
+    // do something with the returned posts
+});
+
+// Promises
+wp.posts().then(function( data ) {
+    // do something with the returned posts
+}).catch(function( err ) {
+    // handle error
+});
+
+del(['tmp/*.js', '!tmp/unicorn.js']).then(paths => {
+    console.log('Deleted files and folders:\n', paths.join('\n'));
 });
 
 // The default task (called when you run `gulp` from cli)
