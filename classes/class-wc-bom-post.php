@@ -189,8 +189,9 @@ class WC_Bom_Post {
 	 *
 	 */
 	public function register_statuses() {
-
-		foreach ( $this->get_statuses() as $status ) {
+		$this->set_statuses();
+		$s = $this->get_statuses();
+		foreach ( $s as $status ) {
 			register_post_status( $status );
 		}
 	}
