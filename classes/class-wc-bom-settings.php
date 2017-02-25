@@ -33,9 +33,6 @@ class WC_Bom_Settings {
 	}
 
 
-
-
-
 	/**
 	 * Add options page
 	 */
@@ -44,7 +41,7 @@ class WC_Bom_Settings {
 		$pending_count = $count->pending;
 		// This page will be under "Settings"add_submenu_page( 'tools.php', 'SEO Image Tags', 'SEO Image Tags', 'manage_options', 'seo_image_tags', 'seo_image_tags_options_page' );
 
-       // add_submenu_page()
+		// add_submenu_page()
 
 
 		add_menu_page(
@@ -52,23 +49,31 @@ class WC_Bom_Settings {
 			'Woo BOM',
 			'manage_options',
 			'wc-bom-admin',
-			[$this,'settings_callback'],
-            'dashicons-clipboard',//plugins_url( 'myplugin/images/icon.png' ),
-            57
+			[ $this, 'settings_callback' ],
+			'dashicons-clipboard',//plugins_url( 'myplugin/images/icon.png' ),
+			57
 		);
 
-        add_submenu_page('wc-bom-admin', 'Parts', 'Parts', 'manage_options', 'edit.php?post_type=part');
+		add_submenu_page( 'wc-bom-admin', 'Parts', 'Parts', 'manage_options', 'edit.php?post_type=part' );
 		//add_menu_page('separator2','','','','','',61);
 
-		add_submenu_page( 'woocommerce', 'Bill of Materials', 'Bill of Materials', 'manage_options', 'wc-bom-admin', [$this, 'settings_callback'] );
+		add_submenu_page( 'woocommerce', 'Bill of Materials', 'Bill of Materials', 'manage_options', 'wc-bom-admin', [
+			$this,
+			'settings_callback',
+		] );
 
-		add_submenu_page('wc-bom-admin', 'BOM Admin', 'BOM Settings', 'manage_options', 'bom-admin', [$this, 'settings_callback']);
+		add_submenu_page( 'wc-bom-admin', 'BOM Admin', 'BOM Settings', 'manage_options', 'bom-admin', [
+			$this,
+			'settings_callback',
+		] );
 
-		add_options_page('Bom Options', 'WooCommerce BOM', 'manage_options', 'bom-admin', [$this,'settings_callback']);
+		add_options_page( 'Bom Options', 'WooCommerce BOM', 'manage_options', 'bom-admin', [
+			$this,
+			'settings_callback',
+		] );
 
 		add_filter( 'add_menu_classes', [ $this, 'pending' ] );
 	}
-
 
 
 	/**
