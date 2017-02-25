@@ -50,8 +50,6 @@ class WC_Bom {
 		$this->check_requirements();
 		$this->plugin_options();
 		$this->load_assets();
-		$this->posts = new WC_Bom_Post();
-
 		add_action( 'wp_enqueue_scripts', [ $this, 'load_assets' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_admin_assets' ] );
 		add_filter( 'plugin_action_links', [ $this, 'plugin_links' ], 10, 5 );

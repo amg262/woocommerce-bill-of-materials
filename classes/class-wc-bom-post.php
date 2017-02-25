@@ -53,7 +53,7 @@ class WC_Bom_Post {
 	 * WC_Bom_Post constructor.
 	 */
 	public function __construct() {
-		add_action( 'init', [$this, 'register_statuses'] );
+		add_action( 'init', [ $this, 'set_statuses' ] );
 		add_action( 'init', [ $this, 'register_posts' ] );
 		add_action( 'init', [ $this, 'register_taxonomies' ] );
 	}
@@ -103,21 +103,21 @@ class WC_Bom_Post {
 			"hierarchical"        => true,
 			"rewrite"             => [ "slug" => "part", "with_front" => true ],
 			"query_var"           => true,
-			"menu_icon"           => "dashicons-hammer",
+			"menu_icon"           => "dashicons-admin-tools",
 			"supports"            => [
 				"title",
 				"editor",
 				"thumbnail",
 				"excerpt",
-				"trackbacks",
-				"custom-fields",
+				//"trackbacks",
+				//"custom-fields",
 				"comments",
 				"revisions",
 				"author",
 				"page-attributes",
 				"post-formats",
 			],
-			"taxonomies"          => [ "post_tag", "product_cat", "product_tag", "product_shipping_class" ],
+			"taxonomies"          => [ "product_shipping_class" ],
 		];
 
 		register_post_type( "part", $args );
@@ -189,9 +189,9 @@ class WC_Bom_Post {
 	 *
 	 */
 	public function register_statuses() {
-		$this->set_statuses();
-		$s = $this->get_statuses();
-		foreach ( $s as $status ) {
+		$obj = $this->set_statuses();
+		//$s = $this->get_statuses();
+		foreach ( $obj as $status ) {
 			register_post_status( $status );
 		}
 	}
@@ -220,104 +220,69 @@ class WC_Bom_Post {
 
 
 	/**
-	 * @return array
+	 *
 	 */
-	public
-	function get_statuses() {
+	public function set_statuses() {
 
-		if ( ! $this->statuses ) {
-			$this->set_statuses();
-		}
+		//$this->statuses = [
+		register_post_status( 'received',
+		                      [
+			                      'label'                     => _x( 'Received', 'part' ),
+			                      'public'                    => true,
+			                      'exclude_from_search'       => false,
+			                      'show_in_admin_all_list'    => true,
+			                      'show_in_admin_status_list' => true,
+			                      'label_count'
+			                                                  => _n_noop( 'Received <span class="count">(%s)</span>', 'Received <span class="count">(%s)</span>' ),
+		                      ] );
+
+		register_post_status( 'shipped',
+		                      [
+			                      'label'                     => _x( 'Shipped', 'part' ),
+			                      'public'                    => true,
+			                      'exclude_from_search'       => false,
+			                      'show_in_admin_all_list'    => true,
+			                      'show_in_admin_status_list' => true,
+			                      'label_count'
+			                                                  => _n_noop( 'Shipped <span class="count">(%s)</span>', 'Shipped <span class="count">(%s)</span>' ),
+		                      ] );
+		register_post_status( 'outofstock',
+		                      [
+			                      'label'                     => _x( 'Out of Stock', 'part' ),
+			                      'public'                    => true,
+			                      'exclude_from_search'       => false,
+			                      'show_in_admin_all_list'    => true,
+			                      'show_in_admin_status_list' => true,
+			                      'label_count'
+			                                                  => _n_noop( 'Out of Stock <span class="count">(%s)</span>', 'Out of Stock <span class="count">(%s)</span>' ),
+		                      ] );
+		register_post_status( 'req',
+		                      [
+			                      'label'                     => _x( 'Requisitioned', 'part' ),
+			                      'public'                    => true,
+			                      'exclude_from_search'       => false,
+			                      'show_in_admin_all_list'    => true,
+			                      'show_in_admin_status_list' => true,
+			                      'label_count'
+			                                                  => _n_noop( 'Requisitioned <span class="count">(%s)</span>', 'Requisitioned <span class="count">(%s)</span>' ),
+		                      ] );
+		register_post_status( 'finished',
+		                      [
+			                      'label'                     => _x( 'Finished', 'part' ),
+			                      'public'                    => true,
+			                      'exclude_from_search'       => false,
+			                      'show_in_admin_all_list'    => true,
+			                      'show_in_admin_status_list' => true,
+			                      'label_count'
+			                                                  => _n_noop( 'Finished <span class="count">(%s)</span>', 'Finished <span class="count">(%s)</span>' ),
+		                      ] );
+
+		//];
+
 
 		return $this->statuses;
 	}
-
-
-	/**
-	 *
-	 */
-	public
-	function set_statuses() {
-
-		$cpt = $this->get_cpt_list();
-
-		$this->statuses = [
-			'received',
-			[
-				'label'                     => _x( 'Received', $cpt ),
-				'public'                    => true,
-				'exclude_from_search'       => false,
-				'show_in_admin_all_list'    => true,
-				'show_in_admin_status_list' => true,
-				'label_count'
-				                            => _n_noop( 'Received <span class="count">(%s)</span>', 'Received <span class="count">(%s)</span>' ),
-			],
-			'shipped',
-			[
-				'label'                     => _x( 'Shipped', $cpt ),
-				'public'                    => true,
-				'exclude_from_search'       => false,
-				'show_in_admin_all_list'    => true,
-				'show_in_admin_status_list' => true,
-				'label_count'
-				                            => _n_noop( 'Shipped <span class="count">(%s)</span>', 'Shipped <span class="count">(%s)</span>' ),
-			],
-			'outofstock',
-			[
-				'label'                     => _x( 'Out of Stock', $cpt ),
-				'public'                    => true,
-				'exclude_from_search'       => false,
-				'show_in_admin_all_list'    => true,
-				'show_in_admin_status_list' => true,
-				'label_count'
-				                            => _n_noop( 'Out of Stock <span class="count">(%s)</span>', 'Out of Stock <span class="count">(%s)</span>' ),
-			],
-			'req',
-			[
-				'label'                     => _x( 'Requisitioned', $cpt ),
-				'public'                    => true,
-				'exclude_from_search'       => false,
-				'show_in_admin_all_list'    => true,
-				'show_in_admin_status_list' => true,
-				'label_count'
-				                            => _n_noop( 'Requisitioned <span class="count">(%s)</span>', 'Requisitioned <span class="count">(%s)</span>' ),
-			],
-			'finished',
-			[
-				'label'                     => _x( 'Finished', $cpt ),
-				'public'                    => true,
-				'exclude_from_search'       => false,
-				'show_in_admin_all_list'    => true,
-				'show_in_admin_status_list' => true,
-				'label_count'
-				                            => _n_noop( 'Finished <span class="count">(%s)</span>', 'Finished <span class="count">(%s)</span>' ),
-			],
-		];
-
-
-		$this->statuses = [
-			//[ 'name' => 'hold', 'label' => 'On Hold', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'damaged', 'label' => 'Damaged', 'post_types' => [ $cpt ] ],
-			[ 'name' => 'receieved', 'label' => 'Recieved', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'raw', 'label' => 'Raw Material', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'devlivered', 'label' => 'Devlivered', 'post_types' => [ $cpt ] ],
-			[ 'name' => 'shipped', 'label' => 'Shipped', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'missing', 'label' => 'Missing', 'post_types' => [ $cpt ] ],
-			[ 'name' => 'outofstock', 'label' => 'Out of Stock', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'instock', 'label' => 'In Stock', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'overstock', 'label' => 'Overstock', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'production', 'label' => 'In Production', 'post_types' => [ $cpt ] ],
-			[ 'name' => 'reqd', 'label' => 'Requisitioned', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'scrap', 'label' => 'Scrap', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'active', 'label' => 'Active', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'inactive', 'label' => 'Inactive', 'post_types' => [ $cpt ] ],
-			[ 'name' => 'finished', 'label' => 'Finished', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'late', 'label' => 'Late', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'stalled', 'label' => 'Stalled', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'sold', 'label' => 'Sold', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'urgent', 'label' => 'Urgent', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'enqueue', 'label' => 'Enqueue', 'post_types' => [ $cpt ] ],
-			//[ 'name' => 'stalled', 'label' => 'Stalled', 'post_types' => [ $cpt ] ],
-		];
-	}
 }
+
+
+$post = new WC_Bom_Post();

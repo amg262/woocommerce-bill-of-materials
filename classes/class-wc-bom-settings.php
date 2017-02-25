@@ -25,9 +25,15 @@ class WC_Bom_Settings {
 	 * Start up
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', [ $this, 'wc_bom_menu' ], 999 );
+		add_action( 'admin_menu', [ $this, 'wc_bom_menu' ] );
 		add_action( 'admin_init', [ $this, 'page_init' ] );
+
+		//add_filter('custom_menu_order', [$this,'custom_menu_order']); // Activate custom_menu_order
+		//add_filter('menu_order', [$this,'custom_menu_order']);
 	}
+
+
+
 
 
 	/**
@@ -39,30 +45,22 @@ class WC_Bom_Settings {
 		// This page will be under "Settings"add_submenu_page( 'tools.php', 'SEO Image Tags', 'SEO Image Tags', 'manage_options', 'seo_image_tags', 'seo_image_tags_options_page' );
 
        // add_submenu_page()
-		remove_menu_page( 'themes.php' );
 
 
 		add_menu_page(
-			__( 'BOM', 'textdomain' ),
-			'Bill of Materials',
+			__( 'WooCommerce BOM', 'wc_bom' ),
+			'Woo BOM',
 			'manage_options',
 			'wc-bom-admin',
-			'wc_bom_options',
+			[$this,'settings_callback'],
             'dashicons-clipboard',//plugins_url( 'myplugin/images/icon.png' ),
-            60
+            57
 		);
 
-		add_submenu_page(
-			'themes.php',
-            'Themes',
-            'Appearance',
-            'theme_options',
-            'appearance',
-            ''
-        );
+        add_submenu_page('wc-bom-admin', 'Parts', 'Parts', 'manage_options', 'edit.php?post_type=part');
+		//add_menu_page('separator2','','','','','',61);
 
-		//add_menu_page('themes.php');
-		add_submenu_page( 'woocommerce', 'WooCommerce BOM', 'Bill of Materials', 'manage_options', 'my-custom-submenu-page', [$this, 'settings_callback'] );
+		add_submenu_page( 'woocommerce', 'Bill of Materials', 'Bill of Materials', 'manage_options', 'wc-bom-admin', [$this, 'settings_callback'] );
 
 		add_submenu_page('wc-bom-admin', 'BOM Admin', 'BOM Settings', 'manage_options', 'bom-admin', [$this, 'settings_callback']);
 
@@ -70,6 +68,7 @@ class WC_Bom_Settings {
 
 		add_filter( 'add_menu_classes', [ $this, 'pending' ] );
 	}
+
 
 
 	/**
