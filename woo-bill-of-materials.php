@@ -19,6 +19,10 @@ namespace WooBom;
 * Text Domain: woo-custom-overlays
 * License: GPL2
 */
+defined( 'ABSPATH' ) or die( 'Plugin file cannot be accessed directly.' );
+
+const WC_BOM_PREFIX = 'wc_bom';
+
 require_once __DIR__ . '/classes/class-wc-bom-post.php';
 require_once __DIR__ . '/classes/class-wc-bom-settings.php';
 

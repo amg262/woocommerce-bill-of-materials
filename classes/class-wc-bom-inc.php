@@ -7,13 +7,16 @@
  * https://andrewgunn.org
  */
 
-
 /**
  * Created by PhpStorm.
  * User: andy
- * Date: 2/24/17
- * Time: 6:45 PM
+ * Date: 2/25/17
+ * Time: 4:08 PM
  */
-class WC_Bom_Acf {
 
+namespace WooBom;
+
+include plugins_url('includes/wc_bom_scripts.php', __DIR__ );
+
+class WC_Bom_Includes {
 }

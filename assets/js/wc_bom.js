@@ -9,3 +9,10 @@
 /**
  * Created by andy on 2/24/17.
  */
+/*
+ * Function that parses input fields
+ */
+jQuery(document).ready(function($){
+
+
+}); //.ready
