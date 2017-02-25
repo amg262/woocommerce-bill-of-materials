@@ -41,6 +41,7 @@ class WC_Bom_Post {
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_posts' ] );
+
 	}
 
 

@@ -53,6 +53,10 @@ class WC_Bom {
 		add_action( 'wp_enqueue_scripts', [ $this, 'load_assets' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_admin_assets' ] );
 		add_filter( 'plugin_action_links', [ $this, 'plugin_links' ], 10, 5 );
+		add_filter( 'acf/settings/path', 'my_acf_settings_path' );
+		add_filter( 'acf/settings/dir', 'my_acf_settings_dir' );
+		add_filter( 'acf/settings/show_admin', '__return_false' );
+		include_once( get_stylesheet_directory() . '/acf/acf.php' );
 
 		/**
 		 * Including files in other directories
@@ -62,18 +66,35 @@ class WC_Bom {
 	}
 
 
-	/**
-	 *
-	 */
-	public function activate() {
-		flush_rewrite_rules();
+// 1. customize ACF path
+
+	function my_acf_settings_path( $path ) {
+
+		// update path
+		$path = get_stylesheet_directory() . '/acf/';
+
+		// return
+		return $path;
+	}
+
+
+// 2. customize ACF dir
+
+	function my_acf_settings_dir( $dir ) {
+
+		// update path
+		$dir = plugins_url( 'assets/vendor/advanced-custom-fields-pro.js', __FILE__ ) . '/acf/';
+
+		// return
+		return $dir;
 	}
 
 
 	/**
 	 *
 	 */
-	public function deactivate() {
+	public function activate() {
+		flush_rewrite_rules();
 	}
 
 
@@ -94,13 +115,6 @@ class WC_Bom {
 
 
 	/**
-	 *
-	 */
-	public function install_database() {
-	}
-
-
-	/**
 	 * @return mixed|void
 	 */
 	public function plugin_options() {
@@ -110,6 +124,17 @@ class WC_Bom {
 		if ( ! $this->options ) {
 			$args = [ 'init' => true, 'upgrade' => false ];
 			add_option( 'wc_bom_options', $args );
+		}
+
+		if ( function_exists( 'acf_add_options_page' ) ) {
+
+			$option_page = acf_add_options_page( [
+				                                     'page_title' => 'Theme General Settings',
+				                                     'menu_title' => 'Theme Settings',
+				                                     'menu_slug'  => 'theme-general-settings',
+				                                     'capability' => 'edit_posts',
+				                                     'redirect'   => false,
+			                                     ] );
 		}
 	}
 
@@ -190,3 +215,8 @@ class WC_Bom {
 		return $actions;
 	}
 }
+
+
+//add_filter('acf/settings/show_admin', '__return_false');
+
+include __DIR__ . '/assets/vendor/advanced-custom-fields-pro/acf.php';
