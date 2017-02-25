@@ -19,7 +19,7 @@ namespace WooBom;
 * Text Domain: woo-custom-overlays
 * License: GPL2
 */
-//require_once __DIR__ . '/classes/class-wc-bom-post.php';
+require_once __DIR__ . '/classes/class-wc-bom-post.php';
 require_once __DIR__ . '/classes/class-wc-bom-settings.php';
 
 
