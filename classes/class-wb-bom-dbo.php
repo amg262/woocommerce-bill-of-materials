@@ -21,6 +21,10 @@ class WC_Bom_Database {
 
 	}
 
+	public function install() {
+
+	}
+
 	public function insert_dbo() {
 
 	}
