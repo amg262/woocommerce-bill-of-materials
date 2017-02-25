@@ -25,7 +25,7 @@ class WC_Bom_Settings {
 	 * Start up
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', [ $this, 'wc_bom_menu' ] );
+		add_action( 'admin_menu', [ $this, 'wc_bom_menu' ], 999 );
 		add_action( 'admin_init', [ $this, 'page_init' ] );
 	}
 
@@ -38,6 +38,10 @@ class WC_Bom_Settings {
 		$pending_count = $count->pending;
 		// This page will be under "Settings"add_submenu_page( 'tools.php', 'SEO Image Tags', 'SEO Image Tags', 'manage_options', 'seo_image_tags', 'seo_image_tags_options_page' );
 
+       // add_submenu_page()
+		remove_menu_page( 'themes.php' );
+
+
 		add_menu_page(
 			__( 'BOM', 'textdomain' ),
 			'Bill of Materials',
@@ -45,8 +49,21 @@ class WC_Bom_Settings {
 			'wc-bom-admin',
 			'wc_bom_options',
             'dashicons-clipboard',//plugins_url( 'myplugin/images/icon.png' ),
-			6
+            60
 		);
+
+		add_submenu_page(
+			'themes.php',
+            'Themes',
+            'Appearance',
+            'theme_options',
+            'appearance',
+            ''
+        );
+
+		//add_menu_page('themes.php');
+		add_submenu_page( 'woocommerce', 'WooCommerce BOM', 'Bill of Materials', 'manage_options', 'my-custom-submenu-page', [$this, 'settings_callback'] );
+
 		add_submenu_page('wc-bom-admin', 'BOM Admin', 'BOM Settings', 'manage_options', 'bom-admin', [$this, 'settings_callback']);
 
 		add_options_page('Bom Options', 'WooCommerce BOM', 'manage_options', 'bom-admin', [$this,'settings_callback']);
