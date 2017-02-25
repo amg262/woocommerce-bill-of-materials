@@ -70,6 +70,10 @@ class WC_Bom {
 	public function check_requirements() {
 	}
 
+	public function insert_plugin_dbo() {
+
+	}
+
 
 	/**
 	 * @return mixed|void
