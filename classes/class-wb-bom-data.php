@@ -221,9 +221,24 @@ class WC_Bom_Database {
 	public function handle_file( $query_args ) {
 
 		$args = wp_parse_args( $query_args, [
-			'file' => WC_BOM_PREFIX,
-			'ext' => '.txt',
-		    
+			'option' => 'write',
+			'file'   => WC_BOM_PREFIX,
+			'ext'    => '.txt',
+			'data'   => __FILE__,
+			'append' => true,
 		] );
+
+		$option = $args->option;
+		$file   = $args->file . '' . $args->ext;
+		$data   = $args->data;
+		$append = (bool) $args->append;
+		$outcome = false;
+
+		if ( 'write' === $option || 'overwrite' === $option ) {
+			file_put_contents( $file, $data, $append );
+			$outcome = true;
+		} elseif ('read'===$option) {
+			file_get_contents($file,$append);
+		}
 	}
 }
