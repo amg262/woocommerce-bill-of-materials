@@ -68,9 +68,14 @@ class WC_Bom {
 
 
 	public function check_requirements() {
+		if ( ! function_exists( 'is_woocommerce_activated' ) ) {
+			function is_woocommerce_activated() {
+				if ( class_exists( 'woocommerce' ) ) { return true; } else { return false; }
+			}
+		}
 	}
 
-	public function insert_plugin_dbo() {
+	public function install_database() {
 
 	}
 
