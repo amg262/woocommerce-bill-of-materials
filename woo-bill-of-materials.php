@@ -19,6 +19,8 @@ namespace WooBom;
 * Text Domain: woo-custom-overlays
 * License: GPL2
 */
+require_once __DIR__ . '/classes/class-wc-bom-post.php';
+require_once __DIR__ . '/classes/class-wc-bom-settings.php';
 
 
 class WC_Bom {
@@ -27,6 +29,10 @@ class WC_Bom {
 	 * @var
 	 */
 	private $options;
+	/**
+	 * @var
+	 */
+	private $posts;
 
 
 	/**
@@ -41,42 +47,58 @@ class WC_Bom {
 	 *
 	 */
 	public function init() {
-
 		$this->check_requirements();
+		$this->plugin_options();
+		$this->load_assets();
+		$this->posts = new WC_Bom_Post();
 
-		include_once __DIR__ . '/admin/class-wco-options.php';
-		include_once __DIR__ . '/inc/script-styles.php';
-
-		add_action( 'wp_enqueue_scripts', [ $this, 'load_includes' ] );
-		add_filter( 'plugin_action_links', [ $this, 'wco_settings_link' ], 10, 5 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'load_assets' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'load_admin_assets' ] );
+		add_filter( 'plugin_action_links', [ $this, 'plugin_links' ], 10, 5 );
 
 		/**
 		 * Including files in other directories
 		 */
 		register_activation_hook( __FILE__, [ $this, 'activate' ] );
-		register_deactivation_hook( __FILE__, [ $this, 'deactivate' ] );
-		$this->plugin_options();
+		//register_deactivation_hook( __FILE__, [ $this, 'deactivate' ] );
 	}
 
 
+	/**
+	 *
+	 */
 	public function activate() {
+		flush_rewrite_rules();
 	}
 
 
+	/**
+	 *
+	 */
 	public function deactivate() {
 	}
 
 
+	/**
+	 *
+	 */
 	public function check_requirements() {
 		if ( ! function_exists( 'is_woocommerce_activated' ) ) {
 			function is_woocommerce_activated() {
-				if ( class_exists( 'woocommerce' ) ) { return true; } else { return false; }
+				if ( class_exists( 'woocommerce' ) ) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 		}
 	}
 
-	public function install_database() {
 
+	/**
+	 *
+	 */
+	public function install_database() {
 	}
 
 
@@ -85,11 +107,11 @@ class WC_Bom {
 	 */
 	public function plugin_options() {
 
-		$this->options = get_option( WCO_OPTIONS );
+		$this->options = get_option( 'wc_bom_options' );
 
 		if ( ! $this->options ) {
 			$args = [ 'init' => true, 'upgrade' => false ];
-			add_option( WCO_OPTIONS, $args );
+			add_option( 'wc_bom_options', $args );
 		}
 	}
 
@@ -98,7 +120,7 @@ class WC_Bom {
 	 *
 	 */
 	public function load_vendor_assets() {
-		wp_register_script( 'wc_bom_js', plugins_url( 'assets/js/wc_bom.js' ), [ 'jquery' ] );
+		/*wp_register_script( 'wc_bom_js', plugins_url( 'assets/js/wc_bom.js' ), [ 'jquery' ] );
 		wp_register_script( 'wc_bom_min_js', plugins_url( 'assets/js/wc_bom.min.js' ), [ 'jquery' ] );
 		wp_register_style( 'wc_bom_css', plugins_url( 'assets/css/wc_bom.css' ), [ 'jquery' ] );
 		wp_register_style( 'wc_bom_min_css', plugins_url( 'assets/css/wc_bom.min.css' ), [ 'jquery' ] );
@@ -106,7 +128,7 @@ class WC_Bom {
 		wp_enqueue_script( 'wc_bom_js' );
 		wp_enqueue_script( 'wc_bom_min_js' );
 		wp_enqueue_style( 'wc_bom_css' );
-		wp_enqueue_style( 'wc_bom_min_css' );
+		wp_enqueue_style( 'wc_bom_min_css' );*/
 	}
 
 
