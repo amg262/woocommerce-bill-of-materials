@@ -47,8 +47,9 @@ class WC_Bom_Settings {
             'dashicons-clipboard',//plugins_url( 'myplugin/images/icon.png' ),
 			6
 		);
+		add_submenu_page('wc-bom-admin', 'BOM Admin', 'BOM Settings', 'manage_options', 'bom-admin', [$this, 'settings_callback']);
 
-		add_options_page('Bom Options', 'WooCommerce BOM', 'manage_options', 'bom-admin', 'wc_bom_options');
+		add_options_page('Bom Options', 'WooCommerce BOM', 'manage_options', 'bom-admin', [$this,'settings_callback']);
 
 		add_filter( 'add_menu_classes', [ $this, 'pending' ] );
 	}
