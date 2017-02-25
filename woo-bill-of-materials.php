@@ -41,23 +41,40 @@ class WC_Bom {
 	 *
 	 */
 	public function init() {
-		/**
-		 * Including files in other directories
-		 */
+
+		$this->check_requirements();
+
 		include_once __DIR__ . '/admin/class-wco-options.php';
 		include_once __DIR__ . '/inc/script-styles.php';
 
 		add_action( 'wp_enqueue_scripts', [ $this, 'load_includes' ] );
 		add_filter( 'plugin_action_links', [ $this, 'wco_settings_link' ], 10, 5 );
 
-		$this->options();
+		/**
+		 * Including files in other directories
+		 */
+		register_activation_hook( __FILE__, [ $this, 'activate' ] );
+		register_deactivation_hook( __FILE__, [ $this, 'deactivate' ] );
+		$this->plugin_options();
+	}
+
+
+	public function activate() {
+	}
+
+
+	public function deactivate() {
+	}
+
+
+	public function check_requirements() {
 	}
 
 
 	/**
 	 * @return mixed|void
 	 */
-	public function options() {
+	public function plugin_options() {
 
 		$this->options = get_option( WCO_OPTIONS );
 
@@ -71,7 +88,7 @@ class WC_Bom {
 	/**
 	 *
 	 */
-	public function wc_bom_vendor_assets() {
+	public function load_vendor_assets() {
 		wp_register_script( 'wc_bom_js', plugins_url( 'assets/js/wc_bom.js' ), [ 'jquery' ] );
 		wp_register_script( 'wc_bom_min_js', plugins_url( 'assets/js/wc_bom.min.js' ), [ 'jquery' ] );
 		wp_register_style( 'wc_bom_css', plugins_url( 'assets/css/wc_bom.css' ), [ 'jquery' ] );
@@ -87,7 +104,7 @@ class WC_Bom {
 	/**
 	 *
 	 */
-	public function wc_bom_assets() {
+	public function load_assets() {
 		wp_register_script( 'wc_bom_js', plugins_url( 'assets/js/wc_bom.js' ), [ 'jquery' ] );
 		wp_register_script( 'wc_bom_min_js', plugins_url( 'assets/js/wc_bom.min.js' ), [ 'jquery' ] );
 		wp_register_style( 'wc_bom_css', plugins_url( 'assets/css/wc_bom.css' ), [ 'jquery' ] );
@@ -103,7 +120,7 @@ class WC_Bom {
 	/**
 	 *
 	 */
-	public function wc_bom_admin_assets() {
+	public function load_admin_assets() {
 		wp_register_script( 'wc_bom_admin_js', plugins_url( 'assets/js/wc_bom_admin.js' ), [ 'jquery' ] );
 		wp_register_script( 'wc_bom_admin_min_js', plugins_url( 'assets/js/wc_bom_admin.min.js' ), [ 'jquery' ] );
 		wp_register_style( 'wc_bom_admin_css', plugins_url( 'assets/css/wc_bom_admin.css' ), [ 'jquery' ] );
@@ -122,7 +139,7 @@ class WC_Bom {
 	 *
 	 * @return array
 	 */
-	public function wc_bom_plugin_links( $actions, $plugin_file ) {
+	public function plugin_links( $actions, $plugin_file ) {
 		static $plugin;
 
 		if ( ! isset( $plugin ) ) {
