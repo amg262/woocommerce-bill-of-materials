@@ -8,6 +8,7 @@
 
 namespace WooBom;
 
+
 /**
  * Created by PhpStorm.
  * User: andy
@@ -40,34 +41,29 @@ class WC_Bom_Post {
 	 * WC_Bom_Post constructor.
 	 */
 	public function __construct() {
+
 		add_action( 'init', [ $this, 'register_posts' ] );
 
 	}
 
-
-	/**
-	 *
-	 */
 	public function register_posts() {
 
+		/**
+		 * Post Type: Parts.
+		 */
+
 		$labels = [
-			'name'               => __( 'Parts', 'wc-bom' ),
-			'singular_name'      => __( 'Part', 'wc-bom' ),
-			'menu_name'          => __( 'Parts', 'wc-bom' ),
-			'all_items'          => __( 'All Parts', 'wc-bom' ),
-			'add_new'            => __( 'Add New', 'wc-bom' ),
-			'add_new_item'       => __( 'Add New Part', 'wc-bom' ),
-			'edit_item'          => __( 'Edit Part', 'wc-bom' ),
-			'new_item'           => __( 'New Part', 'wc-bom' ),
-			'view_item'          => __( 'View Part', 'wc-bom' ),
-			'view_items'         => __( 'View Parts', 'wc-bom' ),
-			'search_items'       => __( 'Search Part', 'wc-bom' ),
-			'not_found'          => __( 'No Parts Found', 'wc-bom' ),
-			'not_found_in_trash' => __( 'No Parts found in Trash', 'wc-bom' ),
-			'parent_item_colon'  => __( 'Parent Part', 'wc-bom' ),
-			'featured_image'     => __( 'Featured Image for this Part', 'wc-bom' ),
-			'set_featured_image' => __( 'Set Featured Image for this Part', 'wc-bom' ),
-			'parent_item_colon'  => __( 'Parent Part', 'wc-bom' ),
+			'name'          => __( 'Parts', 'wc-bom' ),
+			'singular_name' => __( 'Part', 'wc-bom' ),
+			'menu_name'     => __( 'Parts', 'wc-bom' ),
+			'all_items'     => __( 'All Parts', 'wc-bom' ),
+			'add_new'       => __( 'Add New', 'wc-bom' ),
+			'add_new_item'  => __( 'Add New Part', 'wc-bom' ),
+			'edit_item'     => __( 'Edit Part', 'wc-bom' ),
+			'new_item'      => __( 'New Part', 'wc-bom' ),
+			'view_item'     => __( 'View Part', 'wc-bom' ),
+			'view_items'    => __( 'View Parts', 'wc-bom' ),
+			'archives'      => __( 'Part Directory', 'wc-bom' ),
 		];
 
 		$args = [
@@ -79,7 +75,7 @@ class WC_Bom_Post {
 			'show_ui'             => true,
 			'show_in_rest'        => true,
 			'rest_base'           => 'part',
-			'has_archive'         => true,
+			'has_archive'         => 'part-directory',
 			'show_in_menu'        => true,
 			'show_in_menu_string' => 'wc-bom-admin',
 			'exclude_from_search' => false,
@@ -99,7 +95,6 @@ class WC_Bom_Post {
 				'author',
 				'page-attributes',
 			],
-			'taxonomies'          => [ 'part_category', 'material_tag', 'material_type' ],
 		];
 
 		register_post_type( 'part', $args );
@@ -111,7 +106,13 @@ class WC_Bom_Post {
 		$labels = [
 			'name'          => __( 'Materials', 'wc-bom' ),
 			'singular_name' => __( 'Material', 'wc-bom' ),
-			'menu_name'     => __( 'Materials', 'wc-bom' ),
+			'menu_name'     => __( 'Material', 'wc-bom' ),
+			'all_items'     => __( 'All Materials', 'wc-bom' ),
+			'add_new'       => __( 'Add New', 'wc-bom' ),
+			'add_new_item'  => __( 'Add New Material', 'wc-bom' ),
+			'edit_item'     => __( 'Edit Material', 'wc-bom' ),
+			'new_item'      => __( 'New Material', 'wc-bom' ),
+			'archives'      => __( 'Material Directory', 'wc-bom' ),
 		];
 
 		$args = [
@@ -123,7 +124,7 @@ class WC_Bom_Post {
 			'show_ui'             => true,
 			'show_in_rest'        => true,
 			'rest_base'           => 'materials',
-			'has_archive'         => true,
+			'has_archive'         => 'material-directory',
 			'show_in_menu'        => true,
 			'show_in_menu_string' => 'wc-bom-admin',
 			'exclude_from_search' => false,
@@ -133,16 +134,7 @@ class WC_Bom_Post {
 			'rewrite'             => [ 'slug' => 'material', 'with_front' => true ],
 			'query_var'           => true,
 			'menu_icon'           => 'dashicons-clipboard',
-			'supports'            => [
-				'title',
-				'editor',
-				'thumbnail',
-				'comments',
-				'revisions',
-				'author',
-				'page-attributes',
-			],
-			//'taxonomies' => array( 'part_category', 'material_tag', 'material_type' ),
+			'supports'            => [ 'title', 'editor', 'thumbnail', 'revisions', 'author', 'page-attributes' ],
 		];
 
 		register_post_type( 'material', $args );
@@ -154,20 +146,21 @@ class WC_Bom_Post {
 		$labels = [
 			'name'          => __( 'Assemblies', 'wc-bom' ),
 			'singular_name' => __( 'Assembly', 'wc-bom' ),
-			'menu_name'     => __( 'Assemblies', 'wc-bom' ),
+			'menu_name'     => __( 'Assembly', 'wc-bom' ),
 			'all_items'     => __( 'All Assemblies', 'wc-bom' ),
+			'archives'      => __( 'Assembly Directory', 'wc-bom' ),
 		];
 
 		$args = [
 			'label'               => __( 'Assemblies', 'wc-bom' ),
 			'labels'              => $labels,
-			'description'         => '',
+			'description'         => 'Post type for assemblies build by combining materials with parts.',
 			'public'              => true,
 			'publicly_queryable'  => true,
 			'show_ui'             => true,
 			'show_in_rest'        => true,
 			'rest_base'           => 'assembly',
-			'has_archive'         => true,
+			'has_archive'         => 'product-directory',
 			'show_in_menu'        => true,
 			'show_in_menu_string' => 'wc-bom-admin',
 			'exclude_from_search' => false,
@@ -177,62 +170,45 @@ class WC_Bom_Post {
 			'rewrite'             => [ 'slug' => 'assembly', 'with_front' => true ],
 			'query_var'           => true,
 			'menu_icon'           => 'dashicons-nametag',
-			'supports'            => [
-				'title',
-				'editor',
-				'thumbnail',
-				'comments',
-				'revisions',
-				'author',
-				'page-attributes',
-			],
-			//'taxonomies' => array( 'material_tag', 'material_type', 'part_category' ),
+			'supports'            => [ 'title', 'editor', 'thumbnail', 'revisions', 'author', 'page-attributes' ],
 		];
 
 		register_post_type( 'assembly', $args );
 
 		/**
-		 * Post Type: Requisitions.
+		 * Post Type: Systems.
 		 */
 
 		$labels = [
-			'name'          => __( 'Requisitions', 'wc-bom' ),
-			'singular_name' => __( 'Requisition', 'wc-bom' ),
+			'name'          => __( 'Systems', 'wc-bom' ),
+			'singular_name' => __( 'System', 'wc-bom' ),
+			'archives'      => __( 'System Directory', 'wc-bom' ),
 		];
 
 		$args = [
-			'label'               => __( 'Requisitions', 'wc-bom' ),
+			'label'               => __( 'Systems', 'wc-bom' ),
 			'labels'              => $labels,
 			'description'         => '',
 			'public'              => true,
 			'publicly_queryable'  => true,
 			'show_ui'             => true,
 			'show_in_rest'        => true,
-			'rest_base'           => 'requisitions',
-			'has_archive'         => true,
+			'rest_base'           => 'system',
+			'has_archive'         => 'system-directory',
 			'show_in_menu'        => true,
 			'show_in_menu_string' => 'wc-bom-admin',
 			'exclude_from_search' => false,
 			'capability_type'     => 'product',
 			'map_meta_cap'        => true,
-			'hierarchical'        => false,
-			'rewrite'             => [ 'slug' => 'requisition', 'with_front' => true ],
+			'hierarchical'        => true,
+			'rewrite'             => [ 'slug' => 'system', 'with_front' => true ],
 			'query_var'           => true,
-			'menu_icon'           => 'dashicons-list-view',
-			'supports'            => [
-				'title',
-				'editor',
-				'thumbnail',
-				'comments',
-				'revisions',
-				'author',
-				'page-attributes',
-				'post-formats',
-			],
-			//'taxonomies' => array( 'material_tag', 'material_type' ),
+			'menu_icon'           => 'dashicons-networking',
+			'supports'            => [ 'title', 'editor', 'thumbnail', 'revisions', 'author', 'page-attributes' ],
 		];
 
-		register_post_type( 'requisition', $args );
+
+		register_post_type( 'system', $args );
 	}
 }
 

@@ -201,9 +201,7 @@ class WC_Bom {
 	}
 }
 
-
 $cl = new WC_Bom();
-
 //add_filter('acf/settings/show_admin', '__return_false');
 
 include __DIR__ . '/assets/vendor/advanced-custom-fields-pro/acf.php';
