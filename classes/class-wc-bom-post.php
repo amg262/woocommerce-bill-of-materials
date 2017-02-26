@@ -46,6 +46,9 @@ class WC_Bom_Post {
 
 	}
 
+	/**
+	 *
+	 */
 	public function register_posts() {
 
 		/**
@@ -176,39 +179,40 @@ class WC_Bom_Post {
 		register_post_type( 'assembly', $args );
 
 		/**
-		 * Post Type: Systems.
+		 * Post Type: Inventory Records.
 		 */
 
 		$labels = [
-			'name'          => __( 'Systems', 'wc-bom' ),
-			'singular_name' => __( 'System', 'wc-bom' ),
-			'archives'      => __( 'System Directory', 'wc-bom' ),
+			'name'          => __( 'Inventory Records', 'wc-bom' ),
+			'singular_name' => __( 'Inventory Record', 'wc-bom' ),
+			'menu_name'     => __( 'Inventory', 'wc-bom' ),
+			'archives'      => __( 'Inventory Records', 'wc-bom' ),
 		];
 
 		$args = [
-			'label'               => __( 'Systems', 'wc-bom' ),
+			'label'               => __( 'Inventory Records', 'wc-bom' ),
 			'labels'              => $labels,
 			'description'         => '',
 			'public'              => true,
 			'publicly_queryable'  => true,
 			'show_ui'             => true,
-			'show_in_rest'        => true,
-			'rest_base'           => 'system',
-			'has_archive'         => 'system-directory',
+			'show_in_rest'        => false,
+			'rest_base'           => 'inventory',
+			'has_archive'         => 'inventory-records',
 			'show_in_menu'        => true,
 			'show_in_menu_string' => 'wc-bom-admin',
 			'exclude_from_search' => false,
 			'capability_type'     => 'product',
 			'map_meta_cap'        => true,
 			'hierarchical'        => true,
-			'rewrite'             => [ 'slug' => 'system', 'with_front' => true ],
+			'rewrite'             => [ 'slug' => 'inventory_records', 'with_front' => true ],
 			'query_var'           => true,
 			'menu_icon'           => 'dashicons-networking',
 			'supports'            => [ 'title', 'editor', 'thumbnail', 'revisions', 'author', 'page-attributes' ],
 		];
 
+		register_post_type( 'inventory_records', $args );
 
-		register_post_type( 'system', $args );
 	}
 }
 
