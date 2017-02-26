@@ -35,6 +35,11 @@ namespace WooBom;
  *
  * @package WooBom
  */
+/**
+ * Class WC_Bom_Post
+ *
+ * @package WooBom
+ */
 class WC_Bom_Post {
 
 	/**
@@ -58,7 +63,7 @@ class WC_Bom_Post {
 		$labels = [
 			'name'          => __( 'Parts', 'wc-bom' ),
 			'singular_name' => __( 'Part', 'wc-bom' ),
-			'menu_name'     => __( 'Parts', 'wc-bom' ),
+			'menu_name'     => __( 'Part', 'wc-bom' ),
 			'all_items'     => __( 'All Parts', 'wc-bom' ),
 			'add_new'       => __( 'Add New', 'wc-bom' ),
 			'add_new_item'  => __( 'Add New Part', 'wc-bom' ),
@@ -186,7 +191,7 @@ class WC_Bom_Post {
 			'name'          => __( 'Inventory Records', 'wc-bom' ),
 			'singular_name' => __( 'Inventory Record', 'wc-bom' ),
 			'menu_name'     => __( 'Inventory', 'wc-bom' ),
-			'archives'      => __( 'Inventory Records', 'wc-bom' ),
+			'archives'      => __( 'Inventory Directory', 'wc-bom' ),
 		];
 
 		$args = [
@@ -212,6 +217,41 @@ class WC_Bom_Post {
 		];
 
 		register_post_type( 'inventory_records', $args );
+
+		/**
+		 * Post Type: Change Notices.
+		 */
+
+		$labels = [
+			'name'          => __( 'Change Notices', 'wc-bom' ),
+			'singular_name' => __( 'Change Notice', 'wc-bom' ),
+			'menu_name'     => __( 'Change Notice', 'wc-bom' ),
+			'archives'      => __( 'Change Notice Directory', 'wc-bom' ),
+		];
+
+		$args = [
+			'label'               => __( 'Change Notices', 'wc-bom' ),
+			'labels'              => $labels,
+			'description'         => '',
+			'public'              => true,
+			'publicly_queryable'  => true,
+			'show_ui'             => true,
+			'show_in_rest'        => true,
+			'rest_base'           => 'ecn',
+			'has_archive'         => 'ecn-directory',
+			'show_in_menu'        => true,
+			'show_in_menu_string' => 'wc-bom-admin',
+			'exclude_from_search' => false,
+			'capability_type'     => 'product',
+			'map_meta_cap'        => true,
+			'hierarchical'        => true,
+			'rewrite'             => [ 'slug' => 'change_notice', 'with_front' => true ],
+			'query_var'           => true,
+			'menu_icon'           => 'dashicons-warning',
+			'supports'            => [ 'title', 'editor', 'thumbnail', 'revisions', 'author', 'page-attributes' ],
+		];
+
+		register_post_type( 'change_notice', $args );
 
 	}
 }
