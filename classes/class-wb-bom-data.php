@@ -22,7 +22,17 @@ namespace WooBom;
  *
  * @package WooBom
  */
-class WC_Bom_Database {
+/**
+ * Class WC_Bom_Database
+ *
+ * @package WooBom
+ */
+/**
+ * Class WC_Bom_Data
+ *
+ * @package WooBom
+ */
+class WC_Bom_Data {
 
 	/**
 	 * @var
@@ -80,6 +90,10 @@ class WC_Bom_Database {
 	 * @var
 	 */
 	private $data;
+	/**
+	 * @var
+	 */
+	private $outcome;
 
 	/**
 	 *
@@ -130,13 +144,6 @@ class WC_Bom_Database {
 	}
 
 	/**
-	 * @param $format
-	 * @param $data
-	 */
-	public function output_data( $format, $data ) {
-	}
-
-	/**
 	 * @param $query_args
 	 *
 	 * @return string
@@ -183,6 +190,7 @@ class WC_Bom_Database {
 	 */
 	public function decrypt_data( $query_args ) {
 
+		/** @var TYPE_NAME $query_args */
 		$args = wp_parse_args( $query_args, [
 			'format' => $this->format,
 			'encode' => $this->encode,
@@ -216,29 +224,39 @@ class WC_Bom_Database {
 	}
 
 	/**
+	 * @param $query_args
 	 *
+	 * @return bool|string
 	 */
 	public function handle_file( $query_args ) {
 
+		/** @var TYPE_NAME $query_args */
 		$args = wp_parse_args( $query_args, [
 			'option' => 'write',
-			'file'   => WC_BOM_PREFIX,
-			'ext'    => '.txt',
+			'file'   => 'file.txt',
 			'data'   => __FILE__,
 			'append' => true,
 		] );
 
-		$option = $args->option;
-		$file   = $args->file . '' . $args->ext;
-		$data   = $args->data;
-		$append = (bool) $args->append;
-		$outcome = false;
 
+		$option        = $args->option;
+		$file          = $args->file;
+		$data          = $args->data;
+		$append        = $args->append;
+		$this->outcome = false;
+
+		//var_dump($args);
 		if ( 'write' === $option || 'overwrite' === $option ) {
 			file_put_contents( $file, $data, $append );
-			$outcome = true;
-		} elseif ('read'===$option) {
-			file_get_contents($file,$append);
+			$this->outcome = true;
+		} elseif ( 'read' === $option ) {
+			if ( file_exists( $file ) ) {
+				$this->outcome = file_get_contents( $file, $append );
+			} else {
+				$this->outcome = false;
+			}
 		}
+
+		return $this->outcome;
 	}
 }

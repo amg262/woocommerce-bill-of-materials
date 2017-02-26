@@ -9,6 +9,7 @@
  */
 namespace WooBom;
 
+
 /*
 * Plugin Name: WooCommerce Bill of Materials
 * Plugin URI: https/nextraa.us
@@ -20,13 +21,23 @@ namespace WooBom;
 * License: GPL2
 */
 defined( 'ABSPATH' ) or die( 'Plugin file cannot be accessed directly.' );
-
+/**
+ *
+ */
 const WC_BOM_PREFIX = 'wc_bom';
 
 require_once __DIR__ . '/classes/class-wc-bom-post.php';
 require_once __DIR__ . '/classes/class-wc-bom-settings.php';
 
 
+//require_once __DIR__ . '/classes/class-wb-bom-data.php';
+
+
+/**
+ * Class WC_Bom
+ *
+ * @package WooBom
+ */
 class WC_Bom {
 
 	/**
@@ -38,30 +49,25 @@ class WC_Bom {
 	 */
 	private $posts;
 
-
 	/**
 	 * Plugin constructor.
 	 */
 	public function __construct() {
+
 		$this->init();
 	}
-
 
 	/**
 	 *
 	 */
 	public function init() {
+
 		$this->check_requirements();
 		$this->plugin_options();
 		$this->load_assets();
 		add_action( 'wp_enqueue_scripts', [ $this, 'load_assets' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_admin_assets' ] );
 		add_filter( 'plugin_action_links', [ $this, 'plugin_links' ], 10, 5 );
-		add_filter( 'acf/settings/path', 'my_acf_settings_path' );
-		add_filter( 'acf/settings/dir', 'my_acf_settings_dir' );
-		add_filter( 'acf/settings/show_admin', '__return_false' );
-		include_once( get_stylesheet_directory() . '/acf/acf.php' );
-
 		/**
 		 * Including files in other directories
 		 */
@@ -69,45 +75,22 @@ class WC_Bom {
 		//register_deactivation_hook( __FILE__, [ $this, 'deactivate' ] );
 	}
 
-
-// 1. customize ACF path
-
-	function my_acf_settings_path( $path ) {
-
-		// update path
-		$path = get_stylesheet_directory() . '/acf/';
-
-		// return
-		return $path;
-	}
-
-
-// 2. customize ACF dir
-
-	function my_acf_settings_dir( $dir ) {
-
-		// update path
-		$dir = plugins_url( 'assets/vendor/advanced-custom-fields-pro.js', __FILE__ ) . '/acf/';
-
-		// return
-		return $dir;
-	}
-
-
 	/**
 	 *
 	 */
 	public function activate() {
+
 		flush_rewrite_rules();
 	}
-
 
 	/**
 	 *
 	 */
 	public function check_requirements() {
+
 		if ( ! function_exists( 'is_woocommerce_activated' ) ) {
 			function is_woocommerce_activated() {
+
 				if ( class_exists( 'woocommerce' ) ) {
 					return true;
 				} else {
@@ -116,7 +99,6 @@ class WC_Bom {
 			}
 		}
 	}
-
 
 	/**
 	 * @return mixed|void
@@ -142,7 +124,6 @@ class WC_Bom {
 		}
 	}
 
-
 	/**
 	 *
 	 */
@@ -158,11 +139,11 @@ class WC_Bom {
 		wp_enqueue_style( 'wc_bom_min_css' );*/
 	}
 
-
 	/**
 	 *
 	 */
 	public function load_assets() {
+
 		wp_register_script( 'wc_bom_js', plugins_url( 'assets/js/wc_bom.js' ), [ 'jquery' ] );
 		wp_register_script( 'wc_bom_min_js', plugins_url( 'assets/js/wc_bom.min.js' ), [ 'jquery' ] );
 		wp_register_style( 'wc_bom_css', plugins_url( 'assets/css/wc_bom.css' ), [ 'jquery' ] );
@@ -174,11 +155,11 @@ class WC_Bom {
 		wp_enqueue_style( 'wc_bom_min_css' );
 	}
 
-
 	/**
 	 *
 	 */
 	public function load_admin_assets() {
+
 		wp_register_script( 'wc_bom_admin_js', plugins_url( 'assets/js/wc_bom_admin.js' ), [ 'jquery' ] );
 		wp_register_script( 'wc_bom_admin_min_js', plugins_url( 'assets/js/wc_bom_admin.min.js' ), [ 'jquery' ] );
 		wp_register_style( 'wc_bom_admin_css', plugins_url( 'assets/css/wc_bom_admin.css' ), [ 'jquery' ] );
@@ -190,7 +171,6 @@ class WC_Bom {
 		wp_enqueue_style( 'wc_bom_admin_min_css' );
 	}
 
-
 	/**
 	 * @param $actions
 	 * @param $plugin_file
@@ -198,6 +178,7 @@ class WC_Bom {
 	 * @return array
 	 */
 	public function plugin_links( $actions, $plugin_file ) {
+
 		static $plugin;
 
 		if ( ! isset( $plugin ) ) {
@@ -221,6 +202,9 @@ class WC_Bom {
 }
 
 
+$cl = new WC_Bom();
+
 //add_filter('acf/settings/show_admin', '__return_false');
 
 include __DIR__ . '/assets/vendor/advanced-custom-fields-pro/acf.php';
+
